@@ -21,10 +21,29 @@ class BeerListViewController: UIViewController, BeerPresenterDelegate {
         // Table
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(BeerItemTableViewCell.self)
         
+        loadBeers()
         //Presenter
         presenter.setViewDelegate(delegate: self)
-        presenter.getBeers()
+        
+    }
+    func loadBeers() {
+        presenter.getBeers() { (response, result) in
+            switch result {
+            case true:
+                if let items = response {
+                    self.beers.append(contentsOf: items)
+                    self.tableView.reloadData()
+                }
+            case false: //break
+                if let items = response {
+                    self.beers.append(contentsOf: items)
+                    self.tableView.reloadData()
+                }
+            }
+            
+        }
     }
 }
 
@@ -41,9 +60,12 @@ extension BeerListViewController: UITableViewDataSource {
     return beers.count
 }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)-> UITableViewCell {
-        let cell: BeerItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: "BeerItemCell", for: indexPath) as! BeerItemTableViewCell
-        //cell.configure(url: <#T##URL?#>, beerName: <#T##String?#>, beerAlcoholContent: <#T##String?#>)
-        
+        let cell = tableView.dequeueReusableCell(for: indexPath) as BeerItemTableViewCell
+       
+        cell.configure(url: beers[indexPath.row].imageUrl,
+                       beerName: beers[indexPath.row].name,
+                       beerAlcoholContent: String(beers[indexPath.row].abv))
+            
         return cell
 }
     

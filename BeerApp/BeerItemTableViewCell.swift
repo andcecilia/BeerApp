@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class BeerItemTableViewCell: UITableViewCell {
+class BeerItemTableViewCell: UITableViewCell, ReusableView {
     
     @IBOutlet weak var beerImageView: UIImageView!
     @IBOutlet weak var beerNameLabel: UILabel!
@@ -18,13 +18,13 @@ class BeerItemTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-    public func configure(url: URL?,
+    public func configure(url: String?,
                           beerName: String?,
                           beerAlcoholContent: String?) {
 
         if let imageUrl = url {
             beerImageView.kf.setImage(
-                with: imageUrl,
+                with: URL (string : imageUrl),
                 placeholder: nil,
                 options: [
                     .transition(.fade(0.35))

@@ -9,33 +9,28 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 protocol BeerPresenterDelegate: AnyObject {
     func presentBeers(beers: [Beer])
 }
 
+struct DataType {
+    typealias JSON = [AnyHashable: Any?]
+}
 typealias PresenterDelegate = BeerPresenterDelegate //UIViewController
 
 class BeerPresenter {
     
     weak var delegate: PresenterDelegate?
     
-    public func getBeers(){
+    public func getBeers(_ completion: @escaping (_ response: [Beer]?, _ sucess: Bool) -> Void) {
         guard let url = URL(string: "https://api.punkapi.com/v2/beers") else {return}
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data = data else {
-                return
-            }
-            do {
-                let result = try? JSONSerialization.jsonObject(with: data) //options: .allowFragments) as? [AnyHashable: Any?]
-                //let beers = result?.toBeers()
-                debugPrint(result)
-            }
-            catch {
-                debugPrint(error)
-            }
+        AF.request(url, method: .get, parameters: nil).validate().responseJSON { response in
+            let result = try? JSONSerialization.jsonObject(with: response.data ?? Data(), options: .allowFragments) as? [DataType.JSON]
+            let beers = result?.toBeers()
+            completion(beers, (response.error != nil))
         }
-        task.resume()
     }
     
     public func setViewDelegate(delegate: PresenterDelegate) {
