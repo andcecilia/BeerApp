@@ -6,23 +6,38 @@
 //
 
 import UIKit
-import Kingfisher //?
+import Kingfisher
 
 class BeerItemTableViewCell: UITableViewCell {
-    //@IBOutlet weak var beerItemTableViewCell: BeerItemTableViewCell!
     
-    
-    @IBOutlet weak var contentView: UIView?
+    @IBOutlet weak var beerImageView: UIImageView!
+    @IBOutlet weak var beerNameLabel: UILabel!
+    @IBOutlet weak var beerAlcoholContentLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
+    public func configure(url: URL?,
+                          beerName: String?,
+                          beerAlcoholContent: String?) {
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        if let imageUrl = url {
+            beerImageView.kf.setImage(
+                with: imageUrl,
+                placeholder: nil,
+                options: [
+                    .transition(.fade(0.35))
+                ]
+            )
+        }
+        
+        if let beerName = beerName {
+            beerNameLabel.text = beerName
+        }
+        
+        if let beerAlcoholContent = beerAlcoholContent {
+            beerAlcoholContentLabel.text = beerAlcoholContent
+        }
     }
-    
 }

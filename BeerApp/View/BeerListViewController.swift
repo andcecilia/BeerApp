@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BeerListViewController: UIViewController {
+class BeerListViewController: UIViewController, BeerPresenterDelegate {
 
     @IBOutlet var tableView: UITableView!
         
@@ -32,25 +32,23 @@ extension BeerListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     print("botão")
-        return beers.count
 }
 }
 
 extension BeerListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-    return 3
+    return beers.count
 }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)-> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        cell.textLabel?.text = beers[indexPath.row].name
+        let cell: BeerItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: "BeerItemCell", for: indexPath) as! BeerItemTableViewCell
+        //cell.configure(url: <#T##URL?#>, beerName: <#T##String?#>, beerAlcoholContent: <#T##String?#>)
         
         return cell
 }
     
-    func presentBeers(beers:[Beer]{
-    self.users = users
+    func presentBeers(beers:[Beer]){
+    self.beers = beers
     DispatchQueue.main.async {
         self.tableView.reloadData()
     }

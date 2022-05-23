@@ -17,13 +17,13 @@ struct Beer: Codable {
     let description: String
     let id: Int
 
-private enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
     case imageUrl = "image_url"
     case name,
-    abv,
-tagline,
-ibu,
-description,
-id
-}
+         abv,
+         tagline,
+         ibu,
+         description,
+         id
+    }
 }
